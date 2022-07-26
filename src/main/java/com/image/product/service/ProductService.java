@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Base64;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,7 +38,7 @@ public class ProductService {
 
 
     public String saveProductToDB(MultipartFile file, String brand, String model, String performance,
-                                  String location, int price, String description) {
+                                  String location, int price, String description, Date createDate) {
 
         Product p = new Product();
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
@@ -57,6 +58,7 @@ public class ProductService {
         p.setModel(model);
         p.setPrice(price);
         p.setPerformance(performance);
+        p.setCreateDate(createDate);
         productRepository.save(p);
         return fileName;
 

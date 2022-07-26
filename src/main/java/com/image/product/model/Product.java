@@ -1,6 +1,7 @@
 package com.image.product.model;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "Product_Data")
@@ -17,7 +18,9 @@ public class Product {
     @Lob
     @Column(columnDefinition = "MEDIUMBLOB")
     private String image;
-
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column( nullable = true,name = "create_date")
+    private Date createDate;
 
     public Long getId() {
         return id;
@@ -83,11 +86,17 @@ public class Product {
         this.image = image;
     }
 
+    public Date getCreateDate() {
+        return createDate;
+    }
 
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
 
     @Override
     public String toString() {
-        return "product{" +
+        return "Product{" +
                 "id=" + id +
                 ", brand='" + brand + '\'' +
                 ", model='" + model + '\'' +
@@ -96,7 +105,7 @@ public class Product {
                 ", location='" + location + '\'' +
                 ", price=" + price +
                 ", image='" + image + '\'' +
-
+                ", createDate=" + createDate +
                 '}';
     }
 }
