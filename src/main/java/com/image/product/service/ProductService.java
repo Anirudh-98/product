@@ -8,7 +8,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -22,45 +21,34 @@ public class ProductService {
     {
         return productRepository.findAll();
     }
-    public Optional<Product> getUserById(Long id) {
+    public Optional<Product> getUserById(String id) {
         return productRepository.findById(id);
     }
-    public void deleteProductById(Long id)
+    public void deleteProductById(String id)
     {
         productRepository.deleteById(id);
 
     }
 
-    public Product updateProduct(Long  id, Product product){
+    public Product updateProduct(String  id, Product product){
         product.setId(id);
         return productRepository.save(product);
     }
 
 
-    public String saveProductToDB(MultipartFile file, String brand, String model, String performance,
-                                  String location, int price, String description, Date createDate) {
+    public Product saveProductToDB(MultipartFile file, String brand, String model, String performance,
+                                   String location, Integer price, String description) throws IOException {
 
-        Product p = new Product();
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-        if(fileName.contains(".."))
-        {
-            System.out.println("not a a valid file");
-        }
-        try {
-            p.setImage(Base64.getEncoder().encodeToString(file.getBytes()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        p.setDescription(description);
-        p.setBrand(brand);
-        p.setLocation(location);
-        p.setModel(model);
-        p.setPrice(price);
-        p.setPerformance(performance);
-        p.setCreateDate(createDate);
-        productRepository.save(p);
-        return fileName;
+        Product product = new Product(fileName, file.getContentType(), file.getBytes());
+        product.setBrand(brand);
+        product.setModel(model);
+        product.setPerformance(performance);
+        product.setLocation(location);
+        product.setPrice(price);
+        product.setDescription(description);
+        return productRepository.save(product);
 
     }
+
 }

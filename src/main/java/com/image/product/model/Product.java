@@ -1,33 +1,81 @@
 package com.image.product.model;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Table(name = "Product_Data")
 public class Product {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    private String brand;
-    private String model;
-    private String performance;
-    private String description;
-    private String location;
-    private int price;
-    @Lob
-    @Column(columnDefinition = "MEDIUMBLOB")
-    private String image;
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column( nullable = true,name = "create_date")
-    private Date createDate;
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    private String id;
 
-    public Long getId() {
-        return id;
+    @Column(name = "name")
+    private String name;
+    @Column(name = "brand")
+    private String brand;
+
+    @Column(name = "model")
+    private String model;
+
+    @Column(name = "performance")
+    private String performance;
+
+    @Column(name = "location")
+    private String location;
+
+    @Column(name = "price")
+    private int price;
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "type")
+    private String type;
+
+    //image bytes can have large lengths so we specify a value
+    //which is more than the default length for picByte column
+    @Lob
+    private byte[] picByte;
+
+    public Product() {
+
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Product(String name, String type, byte[] picByte) {
+        this.name = name;
+        this.type = type;
+        this.picByte = picByte;
+    }
+    public String getId(){
+        return id;
+    }
+    public String setId(String id){
+        return this.id;
+    }
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public byte[] getPicByte() {
+        return picByte;
+    }
+
+    public void setPicByte(byte[] picByte) {
+        this.picByte = picByte;
     }
 
     public String getBrand() {
@@ -54,14 +102,6 @@ public class Product {
         this.performance = performance;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public String getLocation() {
         return location;
     }
@@ -78,34 +118,12 @@ public class Product {
         this.price = price;
     }
 
-    public String getImage() {
-        return image;
+    public String getDescription() {
+        return description;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    @Override
-    public String toString() {
-        return "Product{" +
-                "id=" + id +
-                ", brand='" + brand + '\'' +
-                ", model='" + model + '\'' +
-                ", performance='" + performance + '\'' +
-                ", description='" + description + '\'' +
-                ", location='" + location + '\'' +
-                ", price=" + price +
-                ", image='" + image + '\'' +
-                ", createDate=" + createDate +
-                '}';
-    }
 }
