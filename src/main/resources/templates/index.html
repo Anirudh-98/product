@@ -92,7 +92,7 @@
     <div class="card ribbon-corner ribbon-fold mt-5 ms-4"
          style="width: 18rem;" data-tor="place.left place.top"
       th:each="p:${productList}">
-        <img src="*{'data:image/jpeg;base64,'+{p.image}}" class="card-img-top" alt="...">
+        <img src="data:image/jpg;base64,${contentImage}" class="card-img-top" alt="...">
         <div class="card-body">
             <h5 class="card-title" th:text="${p.brand}"></h5>
             <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
