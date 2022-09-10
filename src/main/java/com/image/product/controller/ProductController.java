@@ -16,11 +16,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
-import java.nio.file.Paths;
-import java.util.*;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -108,56 +111,6 @@ public class ProductController {
     }
 }
 
-    @PostMapping("/image/saveImageDetails")
-    public @ResponseBody ResponseEntity<?> createProduct(@RequestParam("name") String name,
-                                                         @RequestParam("price") double price, @RequestParam("description") String description, Model model, HttpServletRequest request
-            ,final @RequestParam("image") MultipartFile file) {
-        try {
-            //String uploadDirectory = System.getProperty("user.dir") + uploadFolder;
-            String uploadDirectory = request.getServletContext().getRealPath(uploadFolder);
-            log.info("uploadDirectory:: " + uploadDirectory);
-            String fileName = file.getOriginalFilename();
-            String filePath = Paths.get(uploadDirectory, fileName).toString();
-            log.info("FileName: " + file.getOriginalFilename());
-            if (fileName == null || fileName.contains("..")) {
-                model.addAttribute("invalid", "Sorry! Filename contains invalid path sequence \" + fileName");
-                return new ResponseEntity<>("Sorry! Filename contains invalid path sequence " + fileName, HttpStatus.BAD_REQUEST);
-            }
-            String[] names = name.split(",");
-            String[] descriptions = description.split(",");
-            java.util.Date createDate = new Date();
-            log.info("Name: " + names[0]+" "+filePath);
-            log.info("description: " + descriptions[0]);
-            log.info("price: " + price);
-            try {
-                File dir = new File(uploadDirectory);
-                if (!dir.exists()) {
-                    log.info("Folder Created");
-                    dir.mkdirs();
-                }
-                // Save the file locally
-                BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
-                stream.write(file.getBytes());
-                stream.close();
-            } catch (Exception e) {
-                log.info("in catch");
-                e.printStackTrace();
-            }
-            byte[] imageData = file.getBytes();
-            ImageGallery imageGallery = new ImageGallery();
-            imageGallery.setName(names[0]);
-            imageGallery.setImage(imageData);
-            imageGallery.setPrice(price);
-            imageGallery.setDescription(descriptions[0]);
-            imageGallery.setCreateDate(createDate);
-            imageGalleryService.saveImage(imageGallery);
-            log.info("HttpStatus===" + new ResponseEntity<>(HttpStatus.OK));
-            return new ResponseEntity<>("Product Saved With File - " + fileName, HttpStatus.OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.info("Exception: " + e);
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-    }
+
 
 
