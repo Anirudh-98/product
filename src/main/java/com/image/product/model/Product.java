@@ -3,6 +3,7 @@ package com.image.product.model;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.net.ProtocolFamily;
 
 @Entity
 @Table(name = "Product_Data")
@@ -36,7 +37,8 @@ public class Product {
 
     //image bytes can have large lengths so we specify a value
     //which is more than the default length for picByte column
-    @Lob
+
+    @Column(name = "image", unique = false, nullable = false, length = 100000)
     private byte[] picByte;
 
     public Product() {
@@ -48,6 +50,9 @@ public class Product {
         this.type = type;
         this.picByte = picByte;
     }
+
+
+
     public String getId(){
         return id;
     }
